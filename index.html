@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Paper Website</title>
+
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #111826;
+      --text: #e6edf3;
+      --muted: #a8b3c1;
+      --btn: #1f6feb;
+      --btn2: #238636;
+      --btn3: #8b5cf6;
+      --border: rgba(255,255,255,0.12);
+    }
+    * { box-sizing: border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 50% 0%, rgba(31,111,235,0.25), transparent 55%), var(--bg);
+      color: var(--text);
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 56px 20px 80px;
+      text-align: center;
+    }
+    h1{
+      margin: 0 0 14px;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    
+    /* ===== Buttons ===== */
+    .btns{
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap: wrap;
+      margin: 18px 0 34px;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration:none;
+      color: white;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.06);
+      transition: transform .08s ease, background .2s ease;
+      min-width: 170px;
+      user-select: none;
+      cursor: pointer;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,0.10); }
+    .btn.paper{ background: color-mix(in srgb, var(--btn) 70%, black); }
+    .btn.code{ background: color-mix(in srgb, var(--btn2) 70%, black); }
+    .btn.data{ background: color-mix(in srgb, var(--btn3) 70%, black); }
+    
+    .btns > a.btn, .btns > .dropdown{ flex: 0 0 170px; }
+    .dropdown .btn{ width: 100%; }
+    button.btn{ font: inherit; border: 1px solid var(--border); outline: none; }
+
+    .icon{ width: 22px; height: 22px; display: inline-block; }
+    .icon svg{ width: 100%; height: 100%; display: block; }
+
+    /* ===== Dataset Dropdown ===== */
+    .dropdown{ position: relative; display: inline-block; }
+    .menu{
+      position: absolute; left: 0; right: 0; margin-top: 10px;
+      background: rgba(17,24,38,0.98);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px;
+      text-align: left;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+      display: none; z-index: 10;
+    }
+    .menu.open{ display:block; }
+    .ds-item{
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+      margin-bottom: 10px;
+    }
+    .ds-item:last-child{ margin-bottom: 0; }
+    .ds-title{ display:flex; align-items:center; justify-content: space-between; gap: 10px; margin-bottom: 6px; font-weight: 800; }
+    .ds-title a{ color: var(--text); text-decoration: none; border-bottom: 1px dashed rgba(255,255,255,0.35); }
+    .ds-title a:hover{ border-bottom-style: solid; }
+    .ds-note{ color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0; }
+    .caret{ font-weight: 900; opacity: 0.9; }
+
+    /* ===== Cards & Layout ===== */
+    .card{
+      background: rgba(17,24,38,0.85);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      text-align: left;
+      margin: 0 auto 20px;
+      max-width: 980px;
+      box-shadow: 0 18px 60px rgba(0,0,0,0.35);
+    }
+    .section-title{
+      margin: 0 0 10px; font-size: 22px; letter-spacing: -0.01em; color: var(--text);
+    }
+    .section-sub{ margin: 0 0 16px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    /* Videos */
+    .video{
+      position: relative; width: 100%; padding-top: 56.25%;
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.04);
+    }
+    .video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+    .video-grid{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+    .video.small{ padding-top: 56.25%; border-radius: 14px; }
+
+    /* ===== Images & Experiments ===== */
+    .img-fluid {
+      width: 100%; height: auto; display: block;
+      border-radius: 8px; border: 1px solid var(--border);
+    }
+    .caption {
+      text-align: center; color: var(--muted); font-size: 13px; margin-top: 8px; font-style: italic;
+    }
+    
+    /* Layout Helpers */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+    .exp-block { margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px dashed var(--border); }
+    .exp-block:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .exp-title { font-size: 18px; font-weight: 700; margin-bottom: 12px; color: #fff; }
+
+    /* Custom Table for Results */
+    .table-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: center; }
+    th { background: rgba(255,255,255,0.08); color: var(--text); padding: 10px; font-weight: 600; }
+    td { padding: 8px; border-top: 1px solid var(--border); color: var(--muted); }
+    tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+    /* Authors */
+    .paper-title{ margin: 0 0 14px; font-size: clamp(28px, 4vw, 44px); line-height: 1.15; letter-spacing: -0.02em; }
+    .authors{ margin: 0 0 10px; color: var(--muted); font-size: 16px; line-height: 1.6; }
+    .author{ color: var(--text); text-decoration: none; font-weight: 700; border-bottom: 1px dashed rgba(255,255,255,0.28); }
+    .author:hover{ border-bottom-style: solid; }
+    .authors sup, .affils sup{ font-size: 0.75em; vertical-align: super; margin-left: 1px; }
+    .affils{ margin: 0 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .affils .sep{ opacity: 0.7; }
+    footer{ margin-top: 22px; color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 860px){
+      .video-grid, .grid-2 { grid-template-columns: 1fr; }
+      .btn{ min-width: 220px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="wrap">
+    <h1 class="paper-title">
+      Onto-Map Relocalization by Multi-Hypothesis<br>
+      LiDAR–Inertial Odometry
+    </h1>
+
+    <p class="authors">
+      <a class="author" href="https://www.linkedin.com/in/tien-dat-nguyen-3bba392a8/" target="_blank" rel="noopener">Tien-Dat Nguyen<sup>1</sup></a>,
+      <a class="author" href="https://brytsknguyen.github.io/" target="_blank" rel="noopener">Thien-Minh Nguyen<sup>2</sup></a> and
+      <a class="author" href="mailto:vinhhao@hcmut.edu.vn">Vinh-Hao Nguyen<sup>*1</sup> ✉️</a>
+    </p>
+
+    <p class="affils">
+      <span><sup>1</sup> Ho Chi Minh City University of Technology (HCMUT-VNU), Vietnam</span>
+      <span class="sep">•</span>
+      <span><sup>2</sup> The University of Queensland, Australia</span>
+    </p>
+
+    <div class="btns">
+      <a class="btn paper" href="TODO_ARXIV_LINK" target="_blank" rel="noopener">
+        <span class="icon">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+             <path d="M16.5 6H13.5L10.5 10.5L7.5 6H4.5L9 12L4.5 18H7.5L10.5 13.5L13.5 18H16.5L12 12L16.5 6Z" 
+                   fill="currentColor" stroke="currentColor" stroke-width="0.5"/>
+          </svg>
+        </span>
+        Paper
+      </a>
+      
+      <a class="btn code" href="TODO_GITHUB_LINK" target="_blank" rel="noopener">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="white">
+            <path d="M12 .8a11.2 11.2 0 0 0-3.54 21.83c.56.1.76-.24.76-.54v-1.9c-3.1.68-3.75-1.33-3.75-1.33-.5-1.3-1.22-1.65-1.22-1.65-1-.7.07-.69.07-.69 1.1.08 1.67 1.13 1.67 1.13.98 1.68 2.56 1.2 3.18.92.1-.71.38-1.2.69-1.47-2.48-.28-5.1-1.24-5.1-5.52 0-1.22.43-2.22 1.13-3-.11-.28-.49-1.42.11-2.96 0 0 .93-.3 3.05 1.15a10.5 10.5 0 0 1 5.56 0c2.12-1.45 3.05-1.15 3.05-1.15.6 1.54.22 2.68.11 2.96.7.78 1.13 1.78 1.13 3 0 4.29-2.62 5.23-5.12 5.51.39.34.74 1.02.74 2.06v3.05c0 .3.2.65.77.54A11.2 11.2 0 0 0 12 .8z"/>
+          </svg>
+        </span>
+        Source Code
+      </a>
+
+      <div class="dropdown">
+        <button class="btn data" id="datasetBtn" type="button" aria-expanded="false">
+          🗂️ Dataset <span class="caret">▾</span>
+        </button>
+
+        <div class="menu" id="datasetMenu">
+          <div class="ds-item">
+            <div class="ds-title">
+              <span>MCDVIRAL</span> <a href="https://mcdviral.github.io/" target="_blank">Link ↗</a>
+            </div>
+            <p class="ds-note">Used for accuracy evaluation.</p>
+          </div>
+          <div class="ds-item">
+            <div class="ds-title">
+              <span>KITTI</span> <a href="https://www.cvlibs.net/datasets/kitti/" target="_blank">Link ↗</a>
+            </div>
+            <p class="ds-note">Multi-session mapping tests.</p>
+          </div>
+          <div class="ds-item">
+            <div class="ds-title">
+              <span>Hard PCL</span> <a href="#" target="_blank">Link ↗</a>
+            </div>
+            <p class="ds-note">Relocalization in blocked scenarios.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="card">
+      <h2 class="section-title">Overview Video</h2>
+      <div class="video">
+        <iframe src="https://www.youtube.com/embed/TODO_MAIN_VIDEO_ID" title="Overview" allowfullscreen></iframe>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Experiment Demos</h2>
+      <div class="video-grid">
+        <div class="video small">
+          <iframe src="https://www.youtube.com/embed/7zCgwuFBgCE" title="Exp 1" allowfullscreen></iframe>
+        </div>
+        <div class="video small">
+          <iframe src="https://www.youtube.com/embed/zKNAZ6yxalI" title="Exp 2" allowfullscreen></iframe>
+        </div>
+        <div class="video small">
+          <iframe src="https://www.youtube.com/embed/ELXeO5OzphQ" title="Exp 3" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">System Architecture</h2>
+      <p class="section-sub">
+        Overview of the proposed Multi-Hypothesis LiDAR-Inertial Odometry framework.
+      </p>
+      
+      <figure style="margin:0;">
+        <img src="resource/system.png" 
+             alt="System Architecture Diagram" 
+             class="img-fluid" 
+             style="width: 50%; display: block; margin: 0 auto;">
+             
+        <figcaption class="caption">Figure 1: The overall architecture of the proposed system.</figcaption>
+      </figure>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">Experimental Results</h2>
+      <p class="section-sub">Quantitative and qualitative evaluations on public datasets.</p>
+
+
+      <div class="exp-block">
+            <div class="exp-block">
+              <div class="exp-title">1. MCDVIRAL Dataset: Accuracy Assessment</div>
+            
+              <div style="display: flex; flex-direction: column; gap: 24px;">
+                
+                <div style="text-align: center;">
+                  <img src="path/to/mcdviral_plot.png" 
+                       alt="MCDVIRAL Trajectory" 
+                       class="img-fluid" 
+                       style="max-width: 80%; margin: 0 auto; display: block;">
+                  <p class="caption">
+                    Figure: Trajectory estimation comparison on MCDVIRAL sequences. 
+                    Our method (Red) aligns closely with Ground Truth.
+                  </p>
+                </div>
+                
+                <div>
+                  <div class="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th rowspan="2" style="vertical-align: middle;">Sequence</th>
+                          <th colspan="5">No prior map</th>
+                          <th colspan="2">Global loc. (prior map)</th>
+                          <th>Ours</th>
+                        </tr>
+                        <tr>
+                          <th style="font-size:12px">LIO-SAM</th>
+                          <th style="font-size:12px">SLICT2</th>
+                          <th style="font-size:12px">FAST-LIO2</th>
+                          <th style="font-size:12px">LIO-SAM (LC)</th>
+                          <th style="font-size:12px">SLICT2 (LC)</th>
+                          <th style="font-size:12px">ULOC</th>
+                          <th style="font-size:12px">STD</th>
+                          <th style="font-size:12px">Full</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr><td>ntu_day_02</td><td>0.316</td><td>0.550</td><td>0.434</td><td>0.317</td><td>0.498</td><td>1.59</td><td>&times;</td><td><strong>0.023</strong></td></tr>
+                        <tr><td>ntu_day_03</td><td>4.404</td><td>2.655</td><td>1.591</td><td>0.926</td><td>1.817</td><td>-</td><td>&times;</td><td><strong>0.031</strong></td></tr>
+                        <tr><td>ntu_day_04</td><td>3.793</td><td>4.073</td><td>2.836</td><td>0.926</td><td>2.490</td><td>-</td><td>&times;</td><td><strong>0.031</strong></td></tr>
+                        <tr><td>ntu_day_05</td><td>3.584</td><td>3.586</td><td>2.666</td><td>1.054</td><td>1.689</td><td>-</td><td>&times;</td><td><strong>0.033</strong></td></tr>
+                        <tr><td>ntu_day_07</td><td>3.635</td><td>2.459</td><td>1.334</td><td>0.896</td><td>1.415</td><td>-</td><td>&times;</td><td><strong>0.030</strong></td></tr>
+                        <tr><td>ntu_day_08</td><td>4.413</td><td>3.538</td><td>2.207</td><td>0.946</td><td>2.002</td><td>-</td><td>&times;</td><td><strong>0.033</strong></td></tr>
+                        <tr><td>ntu_day_09</td><td>1.617</td><td>3.841</td><td>2.747</td><td>0.907</td><td>2.388</td><td>-</td><td>&times;</td><td><strong>0.025</strong></td></tr>
+                        <tr><td>ntu_day_10</td><td>2.429</td><td>1.489</td><td>2.000</td><td>0.714</td><td>1.432</td><td>2.90</td><td>&times;</td><td><strong>0.038</strong></td></tr>
+                        <tr><td>ntu_night_01</td><td>3.090</td><td>1.828</td><td>2.744</td><td>0.866</td><td>1.431</td><td>-</td><td>&times;</td><td><strong>0.022</strong></td></tr>
+                        <tr><td>ntu_night_02</td><td>2.804</td><td>3.663</td><td>3.666</td><td>0.783</td><td>1.345</td><td>2.42</td><td>&times;</td><td><strong>0.025</strong></td></tr>
+                        <tr><td>ntu_night_04</td><td>0.762</td><td>3.264</td><td>1.860</td><td>0.759</td><td>3.290</td><td>2.02</td><td>&times;</td><td><strong>0.034</strong></td></tr>
+                        <tr><td>ntu_night_05</td><td>2.409</td><td>1.699</td><td>1.991</td><td>0.931</td><td>2.132</td><td>-</td><td>&times;</td><td><strong>0.026</strong></td></tr>
+                        <tr><td>ntu_night_06</td><td>2.231</td><td>2.513</td><td>1.681</td><td>0.933</td><td>1.496</td><td>-</td><td>&times;</td><td><strong>0.029</strong></td></tr>
+                        <tr><td>ntu_night_07</td><td>3.063</td><td>1.930</td><td>2.466</td><td>0.844</td><td>1.644</td><td>-</td><td>&times;</td><td><strong>0.025</strong></td></tr>
+                        <tr><td>ntu_night_08</td><td>3.801</td><td>1.459</td><td>2.020</td><td>1.417</td><td>1.192</td><td>-</td><td>&times;</td><td><strong>0.029</strong></td></tr>
+                        <tr><td>ntu_night_11</td><td>4.553</td><td>1.824</td><td>2.175</td><td>0.994</td><td>1.147</td><td>-</td><td>&times;</td><td><strong>0.028</strong></td></tr>
+                        <tr><td>ntu_night_13</td><td>1.132</td><td>1.254</td><td>1.111</td><td>0.982</td><td>1.255</td><td>1.75</td><td>&times;</td><td><strong>0.025</strong></td></tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div style="font-size: 12px; color: var(--muted); margin-top: 10px; line-height: 1.4;">
+                    <p style="margin:0 0 4px;"><strong>Metric:</strong> ATE RMSE (m); lower is better.</p>
+                    <p style="margin:0 0 4px;"><strong>&times;</strong>: Large value due to outliers.</p>
+                    <p style="margin:0;"><strong>ULOC:</strong> Evaluated only on held-out test sequences.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="exp-block">
+              <div class="exp-title">2. Hard Pointcloud Dataset: Robust Relocalization</div>
+              <p class="section-sub" style="margin-bottom:10px;">
+                Demonstrating successful relocalization onto the map after severe tracking loss (LiDAR blockage).
+              </p>
+              
+              <div class="grid-2">
+                <figure style="margin:0;">
+                  <img src="resource/mapMegaparticle.png" alt="Map View" class="img-fluid">
+                  <figcaption class="caption">
+                    Map View: Global consistency after relocalization.
+                  </figcaption>
+                </figure>
+            
+                <figure style="margin:0;">
+                  <img src="resource/trajecMegaparticle.png" alt="Trajectory View" class="img-fluid" style="max-width: 75%; margin: 0 auto; display: block;">
+                  <figcaption class="caption">
+                    Trajectory View: Path alignment estimation.
+                  </figcaption>
+                </figure>
+              </div>
+            
+              <div style="margin-top: 24px;">
+                <p class="section-sub" style="margin-bottom: 8px;">Experiment Video Demonstration:</p>
+                <div class="video">
+                  <iframe 
+                    src="https://www.youtube.com/embed/zKNAZ6yxalI" 
+                    title="Hard Pointcloud Experiment" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+            </div>
+
+            <div class="exp-block">
+              <div class="exp-title">3. KITTI Dataset: Multi-Session Mapping (Seq 09 & 10)</div>
+              <p class="section-sub" style="margin-bottom:10px;">
+                Demonstrating the merging of Sequence 09 and Sequence 10 into a globally consistent map.
+              </p>
+            
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                
+                <figure style="margin:0;">
+                  <img src="resource/kitti_09_10_separate.png" alt="Separate Sequences" class="img-fluid">
+                  <figcaption class="caption">1. Individual Sequences (09 & 10) before merging.</figcaption>
+                </figure>
+            
+                <figure style="margin:0;">
+                  <img src="resource/kitti_common_map.png" alt="Common Map" class="img-fluid">
+                  <figcaption class="caption">2. Merged Global Map of Seq 09 & 10.</figcaption>
+                </figure>
+            
+                <figure style="margin:0;">
+                  <img src="resource/kitti_slam_result.png" alt="SLAM Result" class="img-fluid">
+                  <figcaption class="caption">3. Final SLAM Trajectory Estimation.</figcaption>
+                </figure>
+            
+              </div>
+            
+              <div style="margin-top: 24px;">
+                <p class="section-sub" style="margin-bottom: 8px;">Multi-Session Mapping Demo:</p>
+                <div class="video">
+                  <iframe 
+                    src="https://www.youtube.com/embed/ELXeO5OzphQ" 
+                    title="KITTI Experiment" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                  </iframe>
+                </div>
+              </div>
+            
+            </div>
+
+    </section>
+
+    <footer>
+      © <span id="y"></span> <a href="#" style="color:inherit;">DEE - HCMUT</a>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    const btn = document.getElementById("datasetBtn");
+    const menu = document.getElementById("datasetMenu");
+
+    function closeMenu(){
+      menu.classList.remove("open");
+      btn.setAttribute("aria-expanded", "false");
+    }
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !menu.classList.contains("open");
+      if (willOpen){
+        menu.classList.add("open");
+        btn.setAttribute("aria-expanded", "true");
+      } else {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("click", () => closeMenu());
+    menu.addEventListener("click", (e) => e.stopPropagation());
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeMenu();
+    });
+  </script>
+</body>
+</html>
