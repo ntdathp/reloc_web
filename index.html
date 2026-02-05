@@ -154,9 +154,17 @@
     .author{ color: var(--text); text-decoration: none; font-weight: 700; border-bottom: 1px dashed rgba(255,255,255,0.28); }
     .author:hover{ border-bottom-style: solid; }
     .authors sup, .affils sup{ font-size: 0.75em; vertical-align: super; margin-left: 1px; }
-    .affils{ margin: 0 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-    .affils .sep{ opacity: 0.7; }
+    .affils{ margin: 0 0 22px; color: var(--muted); font-size: 13px; line-height: 1.5; display: block; flex-wrap: wrap; justify-content: center; gap: 10px; }
+    .affils span{
+      display:block;      /* mỗi cái 1 dòng */
+      margin: 2px 0;      /* optional: giãn nhẹ */
+    }
+    .affils .sep{
+      display:none;       /* ẩn dấu phân cách */
+    }
+
     footer{ margin-top: 22px; color: var(--muted); font-size: 13px; }
+
 
     @media (max-width: 860px){
       .video-grid, .grid-2 { grid-template-columns: 1fr; }
@@ -173,16 +181,25 @@
     </h1>
 
     <p class="authors">
-      <a class="author" href="https://www.linkedin.com/in/tien-dat-nguyen-3bba392a8/" target="_blank" rel="noopener">Tien-Dat Nguyen<sup>1</sup></a>,
-      <a class="author" href="https://brytsknguyen.github.io/" target="_blank" rel="noopener">Thien-Minh Nguyen<sup>2</sup></a> and
-      <a class="author" href="mailto:vinhhao@hcmut.edu.vn">Vinh-Hao Nguyen<sup>*1</sup> ✉️</a>
+      <a class="author" href="https://www.linkedin.com/in/tien-dat-nguyen-3bba392a8/" target="_blank" rel="noopener">
+        Tien-Dat Nguyen<sup>1</sup>
+      </a>,
+      <a class="author" href="https://brytsknguyen.github.io/" target="_blank" rel="noopener">
+        Thien-Minh Nguyen<sup>2</sup>
+      </a><span class="ieee-member">, Member, IEEE</span>,
+      and
+      <a class="author" href="mailto:vinhhao@hcmut.edu.vn">
+        Vinh-Hao Nguyen<sup>*1</sup> ✉️
+      </a>
     </p>
-
+    
     <p class="affils">
-      <span><sup>1</sup> Ho Chi Minh City University of Technology (HCMUT-VNU), Vietnam</span>
-      <span class="sep">•</span>
-      <span><sup>2</sup> The University of Queensland, Australia</span>
+      <span><sup>1</sup> Faculty of Electrical and Electronic Engineering, Ho Chi Minh City University of Technology (HCMUT), VNU-HCM, Vietnam</span>
+      <span><sup>2</sup> School of Mining and Mechanical Engineering, The University of Queensland (UQ), Australia</span>
+      <span><sup>*</sup> Corresponding author: <a href="mailto:vinhhao@hcmut.edu.vn">vinhhao@hcmut.edu.vn</a></span>
     </p>
+    
+    
 
     <div class="btns">
       <a class="btn paper" href="TODO_ARXIV_LINK" target="_blank" rel="noopener">
@@ -233,14 +250,14 @@
     </div>
 
     <section class="card">
-      <h2 class="section-title">Overview Video</h2>
+      <h2 class="section-title">Overview</h2>
       <div class="video">
         <iframe src="https://www.youtube.com/embed/OTpmW5_HHsI" title="Overview" allowfullscreen></iframe>
       </div>
     </section>
 
     <section class="card">
-      <h2 class="section-title">Experiment Demos</h2>
+      <h2 class="section-title">Experiment</h2>
       <div class="video-grid">
         <div class="video small">
           <iframe src="https://www.youtube.com/embed/7zCgwuFBgCE" title="Exp 1" allowfullscreen></iframe>
@@ -255,9 +272,8 @@
     </section>
 
     <section class="card">
-      <h2 class="section-title">System Architecture</h2>
+      <h2 class="section-title">Methodology</h2>
       <p class="section-sub">
-        Overview of the proposed Multi-Hypothesis LiDAR-Inertial Odometry framework.
       </p>
       
       <figure style="margin:0;">
@@ -272,7 +288,7 @@
 
     <section class="card">
       <h2 class="section-title">Experimental Results</h2>
-      <p class="section-sub">Quantitative and qualitative evaluations on public datasets.</p>
+      <p class="section-sub">Evaluations on public datasets.</p>
 
 
       <div class="exp-block">
@@ -344,8 +360,26 @@
               </div>
             </div>
 
+            <div style="margin-top: 24px; text-align: center;">
+              <p class="section-sub" style="margin-bottom: 8px; text-align: left;">
+                Experiment Video Demonstration on MCDVIRAL sequence <strong>ntu_night_13</strong>:
+              </p>
+            
+              <div style="position: relative; width: 100%; max-width: 980px; margin: 0 auto; padding-top: 56.25%; border-radius: 12px; overflow: hidden;">
+                <iframe
+                  src="https://www.youtube.com/embed/7zCgwuFBgCE"
+                  title="MCDVIRAL Demo - ntu_night_13"
+                  style="position: absolute; inset: 0; width: 100%; height: 100%; border: 0;"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen>
+                </iframe>
+              </div>
+            </div>
+            
+            
+
             <div class="exp-block">
-              <div class="exp-title">2. Hard Pointcloud Dataset: Robust Relocalization</div>
+              <div class="exp-title">2. Trajectory Recovery After Tracking Loss</div>
               <p class="section-sub" style="margin-bottom:10px;">
                 Demonstrating successful relocalization onto the map after severe tracking loss (LiDAR blockage).
               </p>
@@ -367,7 +401,7 @@
               </div>
             
               <div style="margin-top: 24px;">
-                <p class="section-sub" style="margin-bottom: 8px;">Experiment Video Demonstration:</p>
+                <p class="section-sub" style="margin-bottom: 8px;">Experiment Video Demonstration on Hard Pointcloud Localization Dataset sequence <strong>outdoor_kidnap</strong>:</p>
                 <div class="video">
                   <iframe 
                     src="https://www.youtube.com/embed/zKNAZ6yxalI" 
@@ -380,9 +414,9 @@
             </div>
 
             <div class="exp-block">
-              <div class="exp-title">3. KITTI Dataset: Multi-Session Mapping (Seq 09 & 10)</div>
+              <div class="exp-title">3. Map-Consistent Relocalization Across KITTI Raw Sequences</div>
               <p class="section-sub" style="margin-bottom:10px;">
-                Demonstrating the merging of Sequence 09 and Sequence 10 into a globally consistent map.
+                Demonstrating relocalization of KITTI Raw Sequences 09 and 10 onto the same globally consistent prior map.
               </p>
             
               <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
@@ -393,7 +427,7 @@
                 </figure>
             
                 <figure style="margin:0;">
-                  <img src="resource/kitti_common_map.png" alt="Common Map" class="img-fluid" style="max-width: 87%; margin: 0 auto; display: block;">
+                  <img src="resource/kitti_common_map.png" alt="Common Map" class="img-fluid" style="max-width: 88%; margin: 0 auto; display: block;">
                   <figcaption class="caption">2. Merged Global Map of Seq 09 & 10.</figcaption>
                 </figure>
             
@@ -405,7 +439,7 @@
               </div>
             
               <div style="margin-top: 24px;">
-                <p class="section-sub" style="margin-bottom: 8px;">Multi-Session Mapping Demo:</p>
+                <p class="section-sub" style="margin-bottom: 8px;">Experiment Video Demonstration on KITTI Sequences <strong>09–10</strong>:</p>
                 <div class="video">
                   <iframe 
                     src="https://www.youtube.com/embed/ELXeO5OzphQ" 
